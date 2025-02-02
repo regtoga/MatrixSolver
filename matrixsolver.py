@@ -159,7 +159,7 @@ printMatrix(addrowtorow(1, 1, 4, Matrix0))
 """
 #----------------
 """
-Question 18:
+Question 18: you have to take the abs of the bottom right and also add one for some reason?
 Matrix1 = [
     [1, -6, 3],
     [4, -17, -16],
