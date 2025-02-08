@@ -114,14 +114,68 @@ def printMatrix(matrix:List[List[int]]) -> None:
         print(row)
     print("==================\n")
 
+
+def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) -> List[List[int]]:
+    #find the dimentions
+    rows_matrix = len(matrix)
+    columns_matrix = len(matrix[0])
+
+    currentrow = 0
+    currentcolumn = 0
+
+    #print starting matrix
+    if Print:
+        print("Starting Matrix:")
+        printMatrix(matrix)
+    
+
+    for column in range(0, columns_matrix-1):
+
+        if matrix[currentrow][currentcolumn] != 1 and matrix[currentrow][currentcolumn] != 0:
+            #look at the matrix and scale the first row by the inverse of the pivot
+            scalerow(1/matrix[currentrow][currentcolumn], currentrow+1, matrix)
+            if Print:
+                printMatrix(matrix)
+
+        currentpoviotrow = currentrow + 1
+
+        for row in range(0, rows_matrix-currentpoviotrow):
+            currentrow += 1 #move down to the next row so that we can MURDER the leading term becaust the next one is the pivot
+
+            #look at the 2nd row and add it to a scaled version of the first row to make the first x a zero
+            if matrix[currentrow][currentcolumn] != 0:
+                addrowtorow(currentrow+1, -matrix[currentrow][currentcolumn], currentpoviotrow, matrix)
+                if Print:
+                    printMatrix(matrix)
+            #repeat last step all the way down
+
+        currentrow = currentpoviotrow
+        currentcolumn += 1
+
+    #move up a row if there are more rows to move up pivot is now the 2nd term because your in the 2nd row
+
+    #repeat everything up to this point
+
+    #repeat untill you either make it all the way down, or if its an augmented matrix you get the the answers row.
+
+    #should be in echlon form
+
+    #-------
+
+    #do all of that but upside down
+
+    #should be in reduced row echlon form
+
+    return matrix
 #weights = [3, -4]
 
 Matrix1 = [
     [1, 3, -3, 0],
     [3, 10, -6, -3],
     [3, 11, -1, -8]
-    
 ]
+matrix_solver(Matrix1, True, True)
+#printMatrix(matrix_solver(Matrix0, True))
 
 Matrix2 = [
     [-5, 8],
@@ -133,15 +187,11 @@ Matrix3 = [
     [2]
 ]
 
-
+"""
 print(f"Startingfn:")
 printMatrix(Matrix1)
 
-#printMatrix(ATimesWeights(Matrix1, weights))
-
 printMatrix(AddAllColums(Matrix2))
-
-#printMatrix(scalerow(1/7, 2, Matrix1))
 
 printMatrix(addrowtorow(2, -3, 1, Matrix1))
 
@@ -150,6 +200,12 @@ printMatrix(addrowtorow(3, -3, 1, Matrix1))
 printMatrix(addrowtorow(3, -2, 2, Matrix1))
 
 printMatrix(scalerow(1/2, 3, Matrix1))
+
+"""
+
+#printMatrix(ATimesWeights(Matrix1, weights))
+
+#printMatrix(scalerow(1/7, 2, Matrix1))
 
 #printMatrix(scalerow(1/8, 3, Matrix1))
 
