@@ -2,10 +2,9 @@ from typing import List
 import copy
 
 Matrix0 = [
-    [1, -4, 0, -1, 0, -9],
-    [0, 1, 0, 0, -3, 8],
-    [0, 0, 0, 1, 4, 5],
-    [0, 0, 0, 0, 0, 0],
+    [1, 3, 5, 7],
+    [3, 5, 7, 9],
+    [5, 7, 9, 1]
 ]
 
 Matrix1 = [
@@ -74,30 +73,101 @@ def addrowtorow(r1:int, scale:float, r2:int, matrix:List[List[int]]) -> List[Lis
 
     return matrix    
 
-def printMatrix(matrix:List[List[int]]):
+def ATimesWeights(A_Matrix:List[List[int]], x_weights:List[int]) -> List[List[int]]:
+    """
+    This functions multiplies a matrix (A) by weights(x) and returns the result
+    A = any matrix
+    x = weights
+
+    There NEEDS to be the same ammount of weights as columns, if this isnt the case nothing will happen
+    """
+    #if the lengths arent the same do nothing
+    if len(A_Matrix[0]) != len(x_weights):
+        print("The matrix provided does not match with the weights provided! nothing happend!")
+        return A_Matrix
+    else:
+        for i in range(0, len(A_Matrix)):
+            for j in range(0, len(A_Matrix[i])):
+                A_Matrix[i][j] = A_Matrix[i][j] * x_weights[j]
+
+        return A_Matrix
+
+def AddAllColums(matrix:List[List[int]], Augmented:bool = False) -> List[int]:
+    """
+    pretty self explanetry its adds up all the rows 
+    """
+    answer = [0] * len(matrix)
+
+    if len(matrix[0]) <= 1:
+        print("You cannot sum a matrix that doesnt have more than one x value")
+        return answer
+
+    for i in range(0, len(matrix)):
+        for j in range(0, len(matrix[i])):
+            answer[i] += matrix[i][j]
+
+    return answer
+
+def printMatrix(matrix:List[List[int]]) -> None:
     print("==================")
     for row in matrix:
         print(row)
     print("==================\n")
 
+#weights = [3, -4]
+
 Matrix1 = [
-    [1, -6, 3],
-    [4, -17, -16],
-    [-1, 3, 1],
+    [1, 3, -3, 0],
+    [3, 10, -6, -3],
+    [3, 11, -1, -8]
+    
 ]
+
+Matrix2 = [
+    [-5, 8],
+    [-3, 2]
+]
+
+Matrix3 = [
+    [8],
+    [2]
+]
+
 
 print(f"Startingfn:")
 printMatrix(Matrix1)
 
-printMatrix(addrowtorow(2, -4, 1, Matrix1))
+#printMatrix(ATimesWeights(Matrix1, weights))
 
-printMatrix(addrowtorow(3, 1, 1, Matrix1))
+printMatrix(AddAllColums(Matrix2))
 
-printMatrix(scalerow(1/7, 2, Matrix1))
+#printMatrix(scalerow(1/7, 2, Matrix1))
 
-printMatrix(addrowtorow(1, 6, 2, Matrix1))
+printMatrix(addrowtorow(2, -3, 1, Matrix1))
 
-printMatrix(addrowtorow(3, 3, 2, Matrix1))
+printMatrix(addrowtorow(3, -3, 1, Matrix1))
+
+printMatrix(addrowtorow(3, -2, 2, Matrix1))
+
+printMatrix(scalerow(1/2, 3, Matrix1))
+
+#printMatrix(scalerow(1/8, 3, Matrix1))
+
+#printMatrix(addrowtorow(2, -3, 3, Matrix1))
+
+#printMatrix(addrowtorow(1, 3, 3, Matrix1))
+
+#printMatrix(addrowtorow(1, -3, 2, Matrix1))
+
+#printMatrix(addrowtorow(1, -3, 2, Matrix1))
+
+#printMatrix(addrowtorow(3, 1, 1, Matrix1))
+
+#printMatrix(scalerow(1/7, 2, Matrix1))
+
+#printMatrix(addrowtorow(1, 6, 2, Matrix1))
+
+#printMatrix(addrowtorow(3, 3, 2, Matrix1))
 
 #printMatrix(swaprows(3, 4, Matrix1))
 
@@ -105,77 +175,43 @@ printMatrix(addrowtorow(3, 3, 2, Matrix1))
 
 """
 Question 1:
-Matrix0 = [
-    [1, 2, -2],
-    [3, 8, -2]
-]
-
-print(f"Startingfn:")
-printMatrix(Matrix0)
-
-printMatrix(addrowtorow(2, -3, 1, Matrix0))
-
-printMatrix(scalerow(1/2, 2, Matrix0))
-
-printMatrix(addrowtorow(1, -2, 2, Matrix0))
-"""
-#----------------
-"""
-Question 3:
-Matrix0 = [
-    [1, -3, 0, 0, -4],
-    [0, 1, -1, 0, -6],
-    [0, 0, 1, -2, 3],
-    [0, 0, 0, 1, 2],
-]
-
-print(f"Startingfn:")
-printMatrix(Matrix0)
-
-printMatrix(addrowtorow(3, 2, 4, Matrix0))
-
-printMatrix(addrowtorow(2, 1, 3, Matrix0))
-
-printMatrix(addrowtorow(1, 3, 2, Matrix0))
-"""
-#----------------
-"""
-Question 7:
-Matrix0 = [
-    [1, -4, 0, -1, 0, -9],
-    [0, 1, 0, 0, -3, 8],
-    [0, 0, 0, 1, 4, 5],
-    [0, 0, 0, 0, 0, 0],
-]
-
-print(f"Startingfn:")
-printMatrix(Matrix0)
-
-printMatrix(swaprows(3, 4, Matrix0))
-
-printMatrix(addrowtorow(1, 4, 2, Matrix0))
-
-printMatrix(addrowtorow(1, 1, 4, Matrix0))
-"""
-#----------------
-"""
-Question 18: you have to take the abs of the bottom right and also add one for some reason?
 Matrix1 = [
-    [1, -6, 3],
-    [4, -17, -16],
-    [-1, 3, 1],
+    [1, 3, -3, -3],
+    [-3, -2, 2, 23],
+    [4, 3, 5, -22]
 ]
 
 print(f"Startingfn:")
 printMatrix(Matrix1)
 
-printMatrix(addrowtorow(2, -4, 1, Matrix1))
+printMatrix(addrowtorow(2, 3, 1, Matrix1))
 
-printMatrix(addrowtorow(3, 1, 1, Matrix1))
+printMatrix(addrowtorow(3, -4, 1, Matrix1))
 
 printMatrix(scalerow(1/7, 2, Matrix1))
 
-printMatrix(addrowtorow(1, 6, 2, Matrix1))
+printMatrix(addrowtorow(3, 9, 2, Matrix1))
 
-printMatrix(addrowtorow(3, 3, 2, Matrix1))
+printMatrix(scalerow(1/8, 3, Matrix1))
+
+printMatrix(addrowtorow(2, 1, 3, Matrix1))
+
+printMatrix(addrowtorow(1, 3, 3, Matrix1))
+
+printMatrix(addrowtorow(1, -3, 2, Matrix1))
+"""
+#----------------
+"""
+Question 3:
+
+"""
+#----------------
+"""
+Question 7:
+
+"""
+#----------------
+"""
+Question 18: 
+
 """
