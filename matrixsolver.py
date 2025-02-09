@@ -18,7 +18,7 @@ Matrix2 = [
     [-3, 15, -8],
 ]
 
-def swaprows(r1:int, r2:int, matrix:List[List[int]]) -> List[List[int]]:
+def swaprows(r1:int, r2:int, matrix:List[List[int]], Print:bool = False) -> List[List[int]]:
     """this function takes three int arguments, it will swap the two rows given"""
     newr1 = r1 - 1
     newr2 = r2 - 1
@@ -29,10 +29,12 @@ def swaprows(r1:int, r2:int, matrix:List[List[int]]) -> List[List[int]]:
     matrix[newr1] = row_r2
     matrix[newr2] = row_r1
 
-    print(f"Swap {row_r1} with {row_r2}\n Final = {matrix}")
+    if Print:
+        print(f"Swap {row_r1} with {row_r2}\n Final = {matrix}")
+
     return matrix
 
-def scalerow(scale:float, row:int, matrix:List[List[int]]) -> List[List[int]]:
+def scalerow(scale:float, row:int, matrix:List[List[int]], Print:bool = False) -> List[List[int]]:
     """
     This function takes three arguments,
     first being a value to scale the row by.
@@ -41,7 +43,8 @@ def scalerow(scale:float, row:int, matrix:List[List[int]]) -> List[List[int]]:
 
     newrow = row - 1
 
-    print(f"Scale row{newrow} by {scale}, row{newrow}: {matrix[newrow]}")
+    if Print:
+        print(f"Scale row{newrow} by {scale}, row{newrow}: {matrix[newrow]}")
 
     counter = 0
     for num in matrix[newrow]:
@@ -51,7 +54,7 @@ def scalerow(scale:float, row:int, matrix:List[List[int]]) -> List[List[int]]:
     return matrix
 
 
-def addrowtorow(r1:int, scale:float, r2:int, matrix:List[List[int]]) -> List[List[int]]:
+def addrowtorow(r1:int, scale:float, r2:int, matrix:List[List[int]], Print:bool = False) -> List[List[int]]:
     """
     this function takes four arguments,
     it takes a row to be changed,
@@ -62,7 +65,8 @@ def addrowtorow(r1:int, scale:float, r2:int, matrix:List[List[int]]) -> List[Lis
     newr1 = r1 - 1
     newr2 = r2 - 1
 
-    print(f"add {scale}*{matrix[newr2]} -> {matrix[newr1]}")
+    if Print:
+        print(f"add {scale}*{matrix[newr2]} -> {matrix[newr1]}")
 
     add_to_r1 = scalerow(scale, r2, copy.deepcopy(matrix))
 
@@ -118,7 +122,10 @@ def printMatrix(matrix:List[List[int]]) -> None:
 def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) -> List[List[int]]:
     #find the dimentions
     rows_matrix = len(matrix)
-    columns_matrix = len(matrix[0])
+    if Augmented:
+        columns_matrix = len(matrix[0]) - 1
+    else:
+        columns_matrix = len(matrix[0])
 
     currentrow = 0
     currentcolumn = 0
@@ -129,11 +136,11 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
         printMatrix(matrix)
     
 
-    for column in range(0, columns_matrix-1):
+    for column in range(0, columns_matrix):
 
         if matrix[currentrow][currentcolumn] != 1 and matrix[currentrow][currentcolumn] != 0:
             #look at the matrix and scale the first row by the inverse of the pivot
-            scalerow(1/matrix[currentrow][currentcolumn], currentrow+1, matrix)
+            scalerow(1/matrix[currentrow][currentcolumn], currentrow+1, matrix, Print)
             if Print:
                 printMatrix(matrix)
 
@@ -144,7 +151,7 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
 
             #look at the 2nd row and add it to a scaled version of the first row to make the first x a zero
             if matrix[currentrow][currentcolumn] != 0:
-                addrowtorow(currentrow+1, -matrix[currentrow][currentcolumn], currentpoviotrow, matrix)
+                addrowtorow(currentrow+1, -matrix[currentrow][currentcolumn], currentpoviotrow, matrix, Print)
                 if Print:
                     printMatrix(matrix)
             #repeat last step all the way down
@@ -152,15 +159,30 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
         currentrow = currentpoviotrow
         currentcolumn += 1
 
-    #move up a row if there are more rows to move up pivot is now the 2nd term because your in the 2nd row
+        #move up a row if there are more rows to move up pivot is now the 2nd term because your in the 2nd row
+        
+        #repeat everything up to this point
 
-    #repeat everything up to this point
+        #repeat untill you either make it all the way down, or if its an augmented matrix you get the the answers row.
 
-    #repeat untill you either make it all the way down, or if its an augmented matrix you get the the answers row.
-
-    #should be in echlon form
+        #should be in echlon form
 
     #-------
+
+    for column in range(0, columns_matrix):
+        currentpoviotrow = currentrow
+        currentcolumn -= 1
+        for row in range(0, currentrow-1):
+            currentrow -= 1
+            
+            if matrix[currentrow-1][currentcolumn] != 0:
+                addrowtorow(currentrow, -matrix[currentrow-1][currentcolumn], currentpoviotrow, matrix, Print)
+                if Print:
+                    printMatrix(matrix)
+
+        currentrow = currentpoviotrow - 1
+            
+
 
     #do all of that but upside down
 
@@ -169,13 +191,19 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
     return matrix
 #weights = [3, -4]
 
+Matrix2 = [
+    [1, 3, -3, -3],
+    [-3, -2, 2, 23],
+    [4, 3, 5, -22]
+]
+
 Matrix1 = [
     [1, 3, -3, 0],
     [3, 10, -6, -3],
     [3, 11, -1, -8]
 ]
-matrix_solver(Matrix1, True, True)
-#printMatrix(matrix_solver(Matrix0, True))
+matrix_solver(Matrix2, True, True)
+printMatrix(matrix_solver(Matrix0, True))
 
 Matrix2 = [
     [-5, 8],
