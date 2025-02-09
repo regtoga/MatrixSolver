@@ -104,6 +104,9 @@ def printMatrix(matrix:List[List[int]]) -> None:
 
 
 def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) -> List[List[int]]:
+    """
+    This function uses a redimentary algorithm that we learned in class to solve a matrix using reduced eclon form.
+    """
     #find the dimentions
     rows_matrix = len(matrix)
     if Augmented:
@@ -119,7 +122,6 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
         print("Starting Matrix:")
         printMatrix(matrix)
     
-
     for column in range(0, columns_matrix):
 
         if matrix[currentrow][currentcolumn] != 1 and matrix[currentrow][currentcolumn] != 0:
@@ -128,6 +130,7 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
             if Print:
                 printMatrix(matrix)
 
+        #move up a row if there are more rows to move up pivot is now the 2nd term because your in the 2nd row
         currentpoviotrow = currentrow + 1
 
         for row in range(0, rows_matrix-currentpoviotrow):
@@ -142,16 +145,16 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
 
         currentrow = currentpoviotrow
         currentcolumn += 1
-
-        #move up a row if there are more rows to move up pivot is now the 2nd term because your in the 2nd row
         
         #repeat everything up to this point
 
-        #repeat untill you either make it all the way down, or if its an augmented matrix you get the the answers row.
+    #repeat untill you either make it all the way down, or if its an augmented matrix you get the the answers row.
 
-        #should be in echlon form
+    #should be in echlon form
 
     #-------
+
+    #do all of that but upside down
 
     for column in range(0, columns_matrix):
         currentpoviotrow = currentrow
@@ -165,8 +168,6 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
                     printMatrix(matrix)
 
         currentrow = currentpoviotrow - 1
-            
-    #do all of that but upside down
 
     #should be in reduced row echlon form
 
