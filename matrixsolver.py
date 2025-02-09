@@ -1,23 +1,6 @@
 from typing import List
 import copy
 
-Matrix0 = [
-    [1, 3, 5, 7],
-    [3, 5, 7, 9],
-    [5, 7, 9, 1]
-]
-
-Matrix1 = [
-    [1, -6, 3],
-    [4, -17, -16],
-    [-1, 3, 1],
-]
-
-Matrix2 = [
-    [1, 0, 2],
-    [-3, 15, -8],
-]
-
 def swaprows(r1:int, r2:int, matrix:List[List[int]], Print:bool = False) -> List[List[int]]:
     """this function takes three int arguments, it will swap the two rows given"""
     newr1 = r1 - 1
@@ -98,7 +81,7 @@ def ATimesWeights(A_Matrix:List[List[int]], x_weights:List[int]) -> List[List[in
 
 def AddAllColums(matrix:List[List[int]], Augmented:bool = False) -> List[int]:
     """
-    pretty self explanetry its adds up all the rows 
+    Adds up all the rows returns a scalar instead of a matrix
     """
     answer = [0] * len(matrix)
 
@@ -113,6 +96,7 @@ def AddAllColums(matrix:List[List[int]], Augmented:bool = False) -> List[int]:
     return answer
 
 def printMatrix(matrix:List[List[int]]) -> None:
+    """Prints the matrix"""
     print("==================")
     for row in matrix:
         print(row)
@@ -182,14 +166,33 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
 
         currentrow = currentpoviotrow - 1
             
-
-
     #do all of that but upside down
 
     #should be in reduced row echlon form
 
     return matrix
+
+#this is what the weights should look like for the A_Time_x function
 #weights = [3, -4]
+
+#Some test matrixes
+
+Matrix0 = [
+    [1, 3, 5, 7],
+    [3, 5, 7, 9],
+    [5, 7, 9, 1]
+]
+
+Matrix1 = [
+    [1, -6, 3],
+    [4, -17, -16],
+    [-1, 3, 1],
+]
+
+Matrix2 = [
+    [1, 0, 2],
+    [-3, 15, -8],
+]
 
 Matrix2 = [
     [1, 3, -3, -3],
@@ -202,100 +205,7 @@ Matrix1 = [
     [3, 10, -6, -3],
     [3, 11, -1, -8]
 ]
+
+#top one is set to print out step by step with the 2nd True value
 matrix_solver(Matrix2, True, True)
 printMatrix(matrix_solver(Matrix0, True))
-
-Matrix2 = [
-    [-5, 8],
-    [-3, 2]
-]
-
-Matrix3 = [
-    [8],
-    [2]
-]
-
-"""
-print(f"Startingfn:")
-printMatrix(Matrix1)
-
-printMatrix(AddAllColums(Matrix2))
-
-printMatrix(addrowtorow(2, -3, 1, Matrix1))
-
-printMatrix(addrowtorow(3, -3, 1, Matrix1))
-
-printMatrix(addrowtorow(3, -2, 2, Matrix1))
-
-printMatrix(scalerow(1/2, 3, Matrix1))
-
-"""
-
-#printMatrix(ATimesWeights(Matrix1, weights))
-
-#printMatrix(scalerow(1/7, 2, Matrix1))
-
-#printMatrix(scalerow(1/8, 3, Matrix1))
-
-#printMatrix(addrowtorow(2, -3, 3, Matrix1))
-
-#printMatrix(addrowtorow(1, 3, 3, Matrix1))
-
-#printMatrix(addrowtorow(1, -3, 2, Matrix1))
-
-#printMatrix(addrowtorow(1, -3, 2, Matrix1))
-
-#printMatrix(addrowtorow(3, 1, 1, Matrix1))
-
-#printMatrix(scalerow(1/7, 2, Matrix1))
-
-#printMatrix(addrowtorow(1, 6, 2, Matrix1))
-
-#printMatrix(addrowtorow(3, 3, 2, Matrix1))
-
-#printMatrix(swaprows(3, 4, Matrix1))
-
-
-
-"""
-Question 1:
-Matrix1 = [
-    [1, 3, -3, -3],
-    [-3, -2, 2, 23],
-    [4, 3, 5, -22]
-]
-
-print(f"Startingfn:")
-printMatrix(Matrix1)
-
-printMatrix(addrowtorow(2, 3, 1, Matrix1))
-
-printMatrix(addrowtorow(3, -4, 1, Matrix1))
-
-printMatrix(scalerow(1/7, 2, Matrix1))
-
-printMatrix(addrowtorow(3, 9, 2, Matrix1))
-
-printMatrix(scalerow(1/8, 3, Matrix1))
-
-printMatrix(addrowtorow(2, 1, 3, Matrix1))
-
-printMatrix(addrowtorow(1, 3, 3, Matrix1))
-
-printMatrix(addrowtorow(1, -3, 2, Matrix1))
-"""
-#----------------
-"""
-Question 3:
-
-"""
-#----------------
-"""
-Question 7:
-
-"""
-#----------------
-"""
-Question 18: 
-
-"""
