@@ -1,4 +1,5 @@
 from typing import List
+from fractions import Fraction
 import copy
 
 def swaprows(r1:int, r2:int, matrix:List[List[int]], Print:bool = False) -> List[List[int]]:
@@ -31,7 +32,9 @@ def scalerow(scale:float, row:int, matrix:List[List[int]], Print:bool = False) -
 
     counter = 0
     for num in matrix[newrow]:
-        matrix[newrow][counter] = scale * matrix[newrow][counter]
+        temp = scale * matrix[newrow][counter]
+        matrix[newrow][counter] = Fraction(temp).limit_denominator()
+
         counter += 1
 
     return matrix
@@ -99,7 +102,11 @@ def printMatrix(matrix:List[List[int]]) -> None:
     """Prints the matrix"""
     print("==================")
     for row in matrix:
-        print(row)
+        rowintext = ""
+        for item in row:
+            rowintext += str(item) + ", "
+
+        print(rowintext)
     print("==================\n")
 
 
@@ -173,21 +180,27 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
 
     return matrix
 
+def makeIdentity(size:int) -> list[list[int]]:
+    #This funciton should take a dimetion and return the Identity matrix of that size.
+    pass
+
+def findInverse(matrix:list[list[int]])-> list[list[int]]:
+    #This function should...
+    pass
+
 #this is what the weights should look like for the A_Time_x function
-#weights = [3, -4]
+weights = [1, 0]
 
 #Some test matrixes
 
 Matrix0 = [
-    [1, 3, 5, 7],
-    [3, 5, 7, 9],
-    [5, 7, 9, 1]
+    [1, 0],
+    [0, -1]
 ]
 
 Matrix1 = [
-    [1, -6, 3],
-    [4, -17, -16],
-    [-1, 3, 1],
+    [1, 1, 4],
+    [5, 6, 15]
 ]
 
 Matrix2 = [
@@ -201,12 +214,15 @@ Matrix2 = [
     [4, 3, 5, -22]
 ]
 
-Matrix1 = [
-    [1, 3, -3, 0],
-    [3, 10, -6, -3],
-    [3, 11, -1, -8]
+Matrix4 = [
+    [4, -2, 6, -9],
+    [-5, 7, -7, 0],
+    [7, 9, 6, 2],
+    [5, -3, 7, -10]
 ]
 
+#printMatrix(AddAllColums(ATimesWeights(Matrix0, weights)))
+
 #top one is set to print out step by step with the 2nd True value
-matrix_solver(Matrix2, True, True)
-printMatrix(matrix_solver(Matrix0, True))
+matrix_solver(Matrix4, True, True)
+#printMatrix(matrix_solver(Matrix0, True))
