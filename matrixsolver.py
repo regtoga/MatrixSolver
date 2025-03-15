@@ -76,9 +76,10 @@ def ATimesWeights(A_Matrix:List[List[int]], x_weights:List[int]) -> List[List[in
         print("The matrix provided does not match with the weights provided! nothing happend!")
         return A_Matrix
     else:
-        for i in range(0, len(A_Matrix)):
-            for j in range(0, len(A_Matrix[i])):
-                A_Matrix[i][j] = A_Matrix[i][j] * x_weights[j]
+        for h in range (0, len(x_weights)):
+            for i in range(0, len(A_Matrix)):
+                for j in range(0, len(A_Matrix[i])):
+                    A_Matrix[i][j] = A_Matrix[i][j] * x_weights[h][j]
 
         return A_Matrix
 
@@ -110,7 +111,7 @@ def printMatrix(matrix:List[List[int]]) -> None:
     print("==================\n")
 
 
-def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) -> List[List[int]]:
+def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False, FindInverse:bool = False) -> List[List[int]]:
     """
     This function uses a redimentary algorithm that we learned in class to solve a matrix using reduced eclon form.
     """
@@ -118,24 +119,41 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
     rows_matrix = len(matrix)
     if Augmented:
         columns_matrix = len(matrix[0]) - 1
+        if FindInverse:
+            FindInverse = False
+            print("You cant find inverse with a Augmented matrix, bc im to lazy to think about it.")
     else:
         columns_matrix = len(matrix[0])
 
     currentrow = 0
     currentcolumn = 0
 
+    IdentityMatrix = makeIdentity(rows_matrix)
+
     #print starting matrix
     if Print:
         print("Starting Matrix:")
         printMatrix(matrix)
-    
+
+    if (FindInverse and not Augmented) and Print:
+        print("Inverse:")
+        printMatrix(IdentityMatrix)
+
     for column in range(0, columns_matrix):
 
         if matrix[currentrow][currentcolumn] != 1 and matrix[currentrow][currentcolumn] != 0:
             #look at the matrix and scale the first row by the inverse of the pivot
-            scalerow(1/matrix[currentrow][currentcolumn], currentrow+1, matrix, Print)
+            scale = 1/matrix[currentrow][currentcolumn]
+            scalerow(scale, currentrow+1, matrix, Print)
+
             if Print:
                 printMatrix(matrix)
+
+            if FindInverse and not Augmented:
+                scalerow(scale, currentrow+1, IdentityMatrix, Print)
+                if Print:
+                    print("Inverse:")
+                    printMatrix(IdentityMatrix)
 
         #move up a row if there are more rows to move up pivot is now the 2nd term because your in the 2nd row
         currentpoviotrow = currentrow + 1
@@ -145,9 +163,17 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
 
             #look at the 2nd row and add it to a scaled version of the first row to make the first x a zero
             if matrix[currentrow][currentcolumn] != 0:
-                addrowtorow(currentrow+1, -matrix[currentrow][currentcolumn], currentpoviotrow, matrix, Print)
+                scale = -matrix[currentrow][currentcolumn]
+                addrowtorow(currentrow+1, scale, currentpoviotrow, matrix, Print)
+
                 if Print:
                     printMatrix(matrix)
+
+                if FindInverse and not Augmented:
+                    addrowtorow(currentrow+1, scale, currentpoviotrow, IdentityMatrix, Print)
+                    if Print:
+                        print("Inverse:")
+                        printMatrix(IdentityMatrix)
             #repeat last step all the way down
 
         currentrow = currentpoviotrow
@@ -170,23 +196,53 @@ def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False) ->
             currentrow -= 1
             
             if matrix[currentrow-1][currentcolumn] != 0:
-                addrowtorow(currentrow, -matrix[currentrow-1][currentcolumn], currentpoviotrow, matrix, Print)
+                scale = -matrix[currentrow-1][currentcolumn]
+                addrowtorow(currentrow, scale, currentpoviotrow, matrix, Print)
+                
                 if Print:
                     printMatrix(matrix)
+
+                if FindInverse and not Augmented:
+                    addrowtorow(currentrow, scale, currentpoviotrow, IdentityMatrix, Print)
+                    if Print:
+                        print("Inverse:")
+                        printMatrix(IdentityMatrix)
 
         currentrow = currentpoviotrow - 1
 
     #should be in reduced row echlon form
 
-    return matrix
+    if FindInverse and not Augmented:
+        if matrix == makeIdentity(rows_matrix):
+            return IdentityMatrix
+        else:
+            if Print:
+                print("======================")
+                print("There wasnt a Inverse!")
+                print("======================")
+            return False
+    else:
+        return matrix
 
 def makeIdentity(size:int) -> list[list[int]]:
     #This funciton should take a dimetion and return the Identity matrix of that size.
-    pass
+    
+    Identity = []
+    counter = 0
+    for height in range(0, size):
+        Identity.append([])
+        for width in range(0, size):
+            if width == counter:
+                Identity[height].append(1)
+            else:
+                Identity[height].append(0)
+        counter += 1
 
-def findInverse(matrix:list[list[int]])-> list[list[int]]:
+    return Identity
+
+def findInverse(matrix:list[list[int]], Print:bool = False)-> list[list[int]]:
     #This function should...
-    pass
+    return matrix_solver(matrix, False, Print, True)
 
 #this is what the weights should look like for the A_Time_x function
 weights = [1, 0]
@@ -194,13 +250,13 @@ weights = [1, 0]
 #Some test matrixes
 
 Matrix0 = [
-    [1, 0],
-    [0, -1]
+    [3, -9],
+    [-3, 5]
 ]
 
 Matrix1 = [
-    [1, 1, 4],
-    [5, 6, 15]
+    [5, 3, 9],
+    [-6,-3, 4]
 ]
 
 Matrix2 = [
@@ -213,6 +269,11 @@ Matrix2 = [
     [-3, -2, 2, 23],
     [4, 3, 5, -22]
 ]
+Matrix3 = [
+    [1, -2, 1],
+    [2, -3, 1],
+    [-3, 5, -2]
+]
 
 Matrix4 = [
     [4, -2, 6, -9],
@@ -221,8 +282,11 @@ Matrix4 = [
     [5, -3, 7, -10]
 ]
 
-#printMatrix(AddAllColums(ATimesWeights(Matrix0, weights)))
 
-#top one is set to print out step by step with the 2nd True value
-matrix_solver(Matrix4, True, True)
-#printMatrix(matrix_solver(Matrix0, True))
+#printMatrix(ATimesWeights(Matrix0, Matrix1))
+
+#matrix_solver(Matrix1, True, True, False)
+
+findInverse(Matrix0, True)
+
+#printMatrix(findInverse(findInverse(Matrix0)))
