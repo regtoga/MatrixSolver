@@ -63,7 +63,7 @@ def addrowtorow(r1:int, scale:float, r2:int, matrix:List[List[int]], Print:bool 
 
     return matrix    
 
-def ATimesWeights(A_Matrix:List[List[int]], x_weights:List[int]) -> List[List[int]]:
+def MultiplyMatrices(A_Matrix:List[List[int]], x_weights:List[int]) -> List[List[int]]:
     """
     This functions multiplies a matrix (A) by weights(x) and returns the result
     A = any matrix
@@ -71,31 +71,58 @@ def ATimesWeights(A_Matrix:List[List[int]], x_weights:List[int]) -> List[List[in
 
     There NEEDS to be the same ammount of weights as columns, if this isnt the case nothing will happen
     """
+    answer = makeNull(len(A_Matrix))
+    temp = makeNull(len(A_Matrix))
+
     #if the lengths arent the same do nothing
     if len(A_Matrix[0]) != len(x_weights):
         print("The matrix provided does not match with the weights provided! nothing happend!")
         return A_Matrix
     else:
         for h in range (0, len(x_weights)):
+            
             for i in range(0, len(A_Matrix)):
                 for j in range(0, len(A_Matrix[i])):
-                    A_Matrix[i][j] = A_Matrix[i][j] * x_weights[h][j]
+                    temp[j][i] = A_Matrix[j][i] * x_weights[i][h]
 
-        return A_Matrix
+            partialanswer = AddAllColums_scalar(temp)
+            
+            for i in range(0, len(A_Matrix)):
+                answer[i][h] = partialanswer[i]
 
-def AddAllColums(matrix:List[List[int]], Augmented:bool = False) -> List[int]:
+        return answer
+
+def AddAllColums_scalar(matrix:List[List[int]]) -> List[int]:
     """
     Adds up all the rows returns a scalar instead of a matrix
     """
     answer = [0] * len(matrix)
 
-    if len(matrix[0]) <= 1:
+    if len(matrix[0]) < 1:
         print("You cannot sum a matrix that doesnt have more than one x value")
         return answer
 
     for i in range(0, len(matrix)):
         for j in range(0, len(matrix[i])):
             answer[i] += matrix[i][j]
+
+    return answer
+
+def AddAllColums_matrix(matrix:List[List[int]]) -> List[List[int]]:
+    """
+    Adds up all the rows returns a matrix
+    """
+    answer = []
+    for item in range(0, len(matrix)):
+        answer.append([0])
+
+    if len(matrix[0]) < 1:
+        print("You cannot sum a matrix that doesnt have atleast one x value")
+        return answer
+
+    for i in range(0, len(matrix)):
+        for j in range(0, len(matrix[i])):
+            answer[i][0] += matrix[i][j]
 
     return answer
 
@@ -111,10 +138,11 @@ def printMatrix(matrix:List[List[int]]) -> None:
     print("==================\n")
 
 
-def matrix_solver(matrix:List[List[int]], Augmented:bool, Print:bool = False, FindInverse:bool = False) -> List[List[int]]:
+def matrix_solver(matrixx:List[List[int]], Augmented:bool, Print:bool = False, FindInverse:bool = False) -> List[List[int]]:
     """
     This function uses a redimentary algorithm that we learned in class to solve a matrix using reduced eclon form.
     """
+    matrix = copy.deepcopy(matrixx)
     #find the dimentions
     rows_matrix = len(matrix)
     if Augmented:
@@ -240,6 +268,17 @@ def makeIdentity(size:int) -> list[list[int]]:
 
     return Identity
 
+def makeNull(size:int) -> list[list[int]]:
+    #This funciton should take a dimetion and return the Null matrix of that size.
+    
+    Identity = []
+    for height in range(0, size):
+        Identity.append([])
+        for width in range(0, size):
+            Identity[height].append(0)
+
+    return Identity
+
 def findInverse(matrix:list[list[int]], Print:bool = False)-> list[list[int]]:
     #This function should...
     return matrix_solver(matrix, False, Print, True)
@@ -249,9 +288,14 @@ weights = [1, 0]
 
 #Some test matrixes
 
+Matrix_1 = [
+    [0],
+    [1]
+]
+
 Matrix0 = [
-    [3, -9],
-    [-3, 5]
+    [-3, 1],
+    [5, 0]
 ]
 
 Matrix1 = [
@@ -270,9 +314,9 @@ Matrix2 = [
     [4, 3, 5, -22]
 ]
 Matrix3 = [
-    [1, -2, 1],
-    [2, -3, 1],
-    [-3, 5, -2]
+    [1, 2, 3],
+    [-2, 5, 7],
+    [-5, 6, 3]
 ]
 
 Matrix4 = [
@@ -282,11 +326,26 @@ Matrix4 = [
     [5, -3, 7, -10]
 ]
 
+Matrix5 = [
+    [0, 2],
+    [1, 0]
+]
 
-#printMatrix(ATimesWeights(Matrix0, Matrix1))
+Matrix6 = [
+    [1, -2],
+    [1, 0]
+]
 
-#matrix_solver(Matrix1, True, True, False)
+#printMatrix(MultiplyMatrices(Matrix0, Matrix1))
 
-findInverse(Matrix0, True)
+#matrix_solver(Matrix3, True, True, False)
+
+printMatrix(Matrix4)
+
+printMatrix(findInverse(Matrix4, False))
+
+printMatrix(MultiplyMatrices(Matrix4, findInverse(Matrix4, False)))
+
+#printMatrix(MultiplyMatrices(Matrix5, Matrix6))
 
 #printMatrix(findInverse(findInverse(Matrix0)))
