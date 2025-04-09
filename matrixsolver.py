@@ -138,18 +138,30 @@ def printMatrix(matrix:List[List[int]]) -> None:
     print("==================\n")
 
 
-def matrix_solver(matrixx:List[List[int]], Augmented:bool, Print:bool = False, FindInverse:bool = False) -> List[List[int]]:
+def matrix_solver(matrixx:List[List[int]], Augmented:bool, Print:bool = False, FindInverse:List[bool] = [False, False]) -> List[List[int]]:
     """
     This function uses a redimentary algorithm that we learned in class to solve a matrix using reduced eclon form.
+    
+    DoWhat:
+    Make Reduced Echelon Form: 00
+    Find Inverse Matrix:       01
+    Find Determinant:          10
+    third thing:               11
     """
+    ReducedEchelon = not(FindInverse[0]) and not(FindInverse[0])
+    Inverse = not(FindInverse[0]) and FindInverse[1]
+    Determinant = FindInverse[0] and not(FindInverse[1])
+    thirdthing = FindInverse[0] and FindInverse[1]
+
+
     matrix = copy.deepcopy(matrixx)
     #find the dimentions
     rows_matrix = len(matrix)
     if Augmented:
         columns_matrix = len(matrix[0]) - 1
-        if FindInverse:
-            FindInverse = False
+        if not(ReducedEchelon):
             print("You cant find inverse with a Augmented matrix, bc im to lazy to think about it.")
+            return False
     else:
         columns_matrix = len(matrix[0])
 
@@ -163,7 +175,7 @@ def matrix_solver(matrixx:List[List[int]], Augmented:bool, Print:bool = False, F
         print("Starting Matrix:")
         printMatrix(matrix)
 
-    if (FindInverse and not Augmented) and Print:
+    if (Inverse and not Augmented) and Print:
         print("Inverse:")
         printMatrix(IdentityMatrix)
 
@@ -177,7 +189,7 @@ def matrix_solver(matrixx:List[List[int]], Augmented:bool, Print:bool = False, F
             if Print:
                 printMatrix(matrix)
 
-            if FindInverse and not Augmented:
+            if Inverse and not Augmented:
                 scalerow(scale, currentrow+1, IdentityMatrix, Print)
                 if Print:
                     print("Inverse:")
@@ -197,7 +209,7 @@ def matrix_solver(matrixx:List[List[int]], Augmented:bool, Print:bool = False, F
                 if Print:
                     printMatrix(matrix)
 
-                if FindInverse and not Augmented:
+                if Inverse and not Augmented:
                     addrowtorow(currentrow+1, scale, currentpoviotrow, IdentityMatrix, Print)
                     if Print:
                         print("Inverse:")
@@ -230,7 +242,7 @@ def matrix_solver(matrixx:List[List[int]], Augmented:bool, Print:bool = False, F
                 if Print:
                     printMatrix(matrix)
 
-                if FindInverse and not Augmented:
+                if Inverse and not Augmented:
                     addrowtorow(currentrow, scale, currentpoviotrow, IdentityMatrix, Print)
                     if Print:
                         print("Inverse:")
@@ -240,7 +252,7 @@ def matrix_solver(matrixx:List[List[int]], Augmented:bool, Print:bool = False, F
 
     #should be in reduced row echlon form
 
-    if FindInverse and not Augmented:
+    if Inverse and not Augmented:
         if matrix == makeIdentity(rows_matrix):
             return IdentityMatrix
         else:
@@ -281,7 +293,7 @@ def makeNull(size:int) -> list[list[int]]:
 
 def findInverse(matrix:list[list[int]], Print:bool = False)-> list[list[int]]:
     #This function should return the inverse of the provided matrix
-    result = matrix_solver(matrix, False, Print, True)
+    result = matrix_solver(matrix, False, Print, [False, True])
 
     if Print:
         print("If Identity Matrix then answer above correct:")
@@ -291,7 +303,9 @@ def findInverse(matrix:list[list[int]], Print:bool = False)-> list[list[int]]:
 
 def findDeterminant(matrix:list[list[int]], Print:bool = False)-> list[list[int]]:
     #This function should return the determinant of the provided matrix
-    return False
+    result = matrix_solver(matrix, False, Print, [True, False])
+    
+    return result
 
 #this is what the weights should look like for the A_Time_x function
 weights = [1, 0]
@@ -347,11 +361,11 @@ Matrix6 = [
 
 #printMatrix(MultiplyMatrices(Matrix0, Matrix1))
 
-#matrix_solver(Matrix4, False, True, False)
+#matrix_solver(Matrix2, True, True)
 
 #printMatrix(Matrix4)
 
-findInverse(Matrix6, True)
+#findInverse(Matrix6, True)
 
 #printMatrix(MultiplyMatrices(Matrix6, findInverse(Matrix6, False)))
 
