@@ -63,7 +63,7 @@ def addrowtorow(r1:int, scale:float, r2:int, matrix:List[List[int]], Print:bool 
 
     return matrix    
 
-def MultiplyMatrices(A_Matrix:List[List[int]], x_weights:List[int]) -> List[List[int]]:
+def MultiplyMatrices(A_Matrix:List[List[int]], x_weights:List[List[int]]) -> List[List[int]]:
     """
     This functions multiplies a matrix (A) by weights(x) and returns the result
     A = any matrix
@@ -280,8 +280,18 @@ def makeNull(size:int) -> list[list[int]]:
     return Identity
 
 def findInverse(matrix:list[list[int]], Print:bool = False)-> list[list[int]]:
-    #This function should...
-    return matrix_solver(matrix, False, Print, True)
+    #This function should return the inverse of the provided matrix
+    result = matrix_solver(matrix, False, Print, True)
+
+    if Print:
+        print("If Identity Matrix then answer above correct:")
+        printMatrix(MultiplyMatrices(matrix, result))
+
+    return result
+
+def findDeterminant(matrix:list[list[int]], Print:bool = False)-> list[list[int]]:
+    #This function should return the determinant of the provided matrix
+    return False
 
 #this is what the weights should look like for the A_Time_x function
 weights = [1, 0]
@@ -320,10 +330,9 @@ Matrix3 = [
 ]
 
 Matrix4 = [
-    [4, -2, 6, -9],
-    [-5, 7, -7, 0],
-    [7, 9, 6, 2],
-    [5, -3, 7, -10]
+    [3, 2, -3, 1],
+    [-12, -6, 18, -12],
+    [12, 4, -24, 20]
 ]
 
 Matrix5 = [
@@ -332,19 +341,19 @@ Matrix5 = [
 ]
 
 Matrix6 = [
-    [1, -2],
-    [1, 0]
+    [2, -1],
+    [1, 1]
 ]
 
 #printMatrix(MultiplyMatrices(Matrix0, Matrix1))
 
-#matrix_solver(Matrix3, True, True, False)
+#matrix_solver(Matrix4, False, True, False)
 
-printMatrix(Matrix4)
+#printMatrix(Matrix4)
 
-printMatrix(findInverse(Matrix4, False))
+findInverse(Matrix6, True)
 
-printMatrix(MultiplyMatrices(Matrix4, findInverse(Matrix4, False)))
+#printMatrix(MultiplyMatrices(Matrix6, findInverse(Matrix6, False)))
 
 #printMatrix(MultiplyMatrices(Matrix5, Matrix6))
 
